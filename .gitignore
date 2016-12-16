@@ -1,0 +1,843 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+#include "conio.h"
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+#define der 77
+#define izq 75
+#define dis 32
+#define tf 11
+#define tc 17
+
+void imprimir(int m[tf][tc],int p);
+void moverse(int m[tf][tc],int band,char nom[10],int p);
+int dados(int j1, int j2, char nom1[10], char nom2[10]);
+int ganador(int m[tf][tc],char nom2[10],int cj);
+int linea_h(int m[tf][tc]);
+int linea_v(int m[tf][tc]);
+void Cargar(int m[tf][tc]);
+int linea4_h(int m[tf][tc]);
+int linea4_v(int m[tf][tc]);
+int linea4_d(int m[tf][tc]);
+
+int main(int argc, char *argv[]) {
+	int j1=1,j2=2,aux1,aux2,aux,h,v,d,h1,v1,d1;
+	int cont=0,cont1=0,cj1,cj2,sal,ce=0,acum=0,pj=0,p=1,p1=1,p2=0;
+	int cd=1,np=1,nh=0,nv=0,nd=0,porc=0,vect[ce],vect1[ce],vect2,op;
+	char nom1[10],nom2[10],vectj[ce][10];
+	int band,tecla,total,turn,j,i,mapa [11][17]={{201,205,203,205,203,205,203,205,203,205,203,205,203,205,203,205,187},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {186,32,186,32,186,32,186,32,186,32,186,32,186,32,186,32,186},
+                                    {200,205,202,205,202,205,202,205,202,205,202,205,202,205,202,205,188},
+                                    };
+
+
+       do{
+        textcolor(10);
+        printf("\t\t\t\tBienvenido\n\n");
+        printf("\t\t\t   %c %c A ",4,254);
+        printf("4 en linea %c %c\n\n\n\n\n\n\n",254,4);
+         textcolor(14);
+        printf("\t\t\t     [1]Iniciar Juego\n\n");
+        printf("\t\t\t     [2]Instrucciones\n");
+      op=getch();
+      system("cls");
+       }while(op<'1' || op>'2');
+       switch(op){
+
+            case '1' :
+            break;
+
+            case '2' :system("cls");
+            textcolor(WHITE);
+                printf("\n\n\n\n\n\t\t\t   El objetivo de 4 en linea es alinear cuatro fichas sobre un tablero,\n\n\t\t\t   de forma vertical, horizontal o diagonal, el primer jugador que logre\n\n\t\t\t   alinear las 4 fichas sera el ganador");
+                printf("\n\n\n\t\t\t   presiona las flechas para mover la ficha y espacio para colocarla");
+                getch();
+                 system("cls");
+
+
+
+        }
+        fflush(stdin);
+        textcolor(WHITE);
+        printf("\t\t\t   Nombre del jugador 1: ");
+        gets(nom1);
+        printf("\n\n");
+	    printf("\t\t\t   Nombre del jugador 2: ");
+        gets(nom2);
+        system("cls");
+
+     turn=dados(j1,j2,nom1,nom2);
+     vect2=turn;
+     	if(turn==j1){
+     		textcolor(10);
+     		printf("\n\n\n\n\n\n\n\t\t\t\t\tinicia %s %c",nom1,254);
+     		}
+
+     	if(turn==j2){
+            textcolor(14);
+     		printf("\n\n\n\n\n\n\n\t\t\t\t\tinicia %s %c",nom2,4);
+     		}
+
+     	printf("\n");
+     	getch();
+
+
+		do{
+            aux1=2,aux2=2; cj1=0,cj2=0; h=0,v=0,d=0,v1=0,d1=0,h1=0;
+            sal=0;
+             Cargar(mapa);
+
+
+		do{
+
+			if(turn==j1)
+            {
+	     	moverse(mapa,j1,nom1,p);
+	     	cj1++;
+		 	turn=j2;
+		 }
+         textcolor(10);
+         aux1=ganador(mapa,nom1,cj1);
+
+        if(aux1!=1){
+
+            if(cj2==32)
+            break;
+
+		 	if(turn==j2)
+            {
+	     	moverse(mapa,j2,nom2,p);
+	     	cj2++;
+	 		turn=j1;
+	 		}
+            textcolor(14);
+	 		aux2=ganador(mapa,nom2,cj2);
+
+            }
+            if(cj1==32 && cj2==32){
+                sal=1;
+            }
+
+		}while(aux1==2 && aux2==2 && sal==0);
+
+		nh=nh+linea4_h(mapa);
+        nv=nv+linea4_v(mapa);
+        nd=nd+linea4_d(mapa);
+		pj++;
+        p++;
+        p1++;
+//---------------------------------------------------------------------------
+        if(aux1==1)
+        {
+        getch();
+        cont++;
+        acum=acum+1;
+        turn=j1;
+        }
+
+        if(aux2==1)
+        {
+         getch();
+        cont1++;
+        acum=acum+1;
+		turn=j2;
+		}
+//--------------------------------------------------------------------------------
+        if(aux1==2 && aux2==2) /// empate
+        {
+        	system("cls");
+        	 textcolor(WHITE);
+         	printf("\t\t\t\tPartida empatada\n\n\n");
+         	 textcolor(10);
+         	h=linea_h(mapa);
+	 		v=linea_v(mapa);
+	 		d=linea_d(mapa);
+	 		total=v+h+d;
+	 		printf("\t\t\tCantidad de jugadas de %s: %d\n\t\t\t3 en linea logradas: %d\n\t\t\tHorizontales: %d\n\t\t\tVerticales: %d\n\t\t\tDiagonales: %d\n\n\n",nom1,cj1,total,h,v,d);
+            textcolor(14);
+	 		h1=linea_h2(mapa);
+	 		v1=linea_v2(mapa);
+	 		d1=linea_d2(mapa);
+	 		total=v1+h1+d1;
+	 		printf("\t\t\tCantidad de jugadas de %s: %d\n\t\t\t3 en linea logradas: %d\n\t\t\tHorizontales: %d\n\t\t\tVerticales: %d\n\t\t\tDiagonales:%d\n\n",nom2,cj2,total,h1,v1,d1);
+	 		system("pause");
+            system("cls");
+
+
+		    turn=dados(j1,j2,nom1,nom2);
+            vect[ce]=p1;
+            vect1[ce]=turn;
+		    ce++;
+		    cd++;
+		    np=p;
+        }
+
+		if(cont==1  && ce>=4) /// cuatro empates y una victoria j1
+		{
+			acum=5;
+		}
+		if(cont==1  && ce>=4) /// cuatro empates y una victoria j2
+		{
+			acum=5;
+		}
+
+		if(cont==3 && cont1==1) /// indiscutible j1 + derrota
+		{
+			acum=5;
+		}
+
+		if(cont==1 && cont1==3)///indiscutible j2 +derrota
+		{
+			acum=5;
+		}
+
+		if(cont==3 && ce==1)/// Indiscutiblej1 + empate
+		{
+			acum=5;
+		}
+
+		if(cont1==3 && ce==1)/// Indiscutible j2 + empate
+		{
+			acum=5;
+		}
+         if(cont==1 && ce==3)/// 3 empates + j1 gana
+		{
+			acum=5;
+		}
+
+        if(cont1==1 && ce==3)/// 3 empates + j2 gana
+		{
+			acum=5;
+		}
+		if(cont==4) /// REY j1 (4 seguidas)
+		{
+			acum=5;
+		}
+
+		if(cont1 ==4) ///REY j2 (4 seguidas )
+		{
+			acum=5;
+		}
+
+		if((cont1==2 || cont==2) && ce==2)/// 2 empatea + j2 o j1 gana 2
+		{
+			acum=5;
+		}
+
+		if(cont1==2 && cont==1 && ce==1)/// 1 empatea + j2 o j1 gana 2
+		{
+			acum=5;
+		}
+		if(cont1==1 && cont==2 && ce==1)
+		{
+				acum=5;
+		}
+		p2++;
+		}while(acum<5);
+///-----------------------fin de la partida estadisticas---------------------------------------------------
+        aux=((cont+cont1)*100)/p2;
+        porc=100-aux;
+
+		system("cls");
+        printf("\t\t\t\t\tEstadisticas\n\n");
+        textcolor(WHITE);
+        printf("Se jugaron %d partidas\n",pj);
+        printf("El jugador");
+        textcolor(10);
+        printf(" %s ",nom1);
+        textcolor(WHITE);
+        printf("gano %d partidas\n",cont);
+
+        printf("El jugador");
+        textcolor(14);
+        printf(" %s ",nom2);
+        textcolor(WHITE);
+        printf("gano %d partidas\n",cont1);
+         textcolor(WHITE);
+        printf("Se empataron %d partidas\n",ce);
+        printf("Los dados se lanzaron %d veces\n",cd);
+        printf("Se gano en 4 en linea de manera Vertical: %d Horizontal: %d y Diagonal: %d\n",nv,nh,nd);
+        printf("El porcentaje de empates fue de: %d %%\n",porc);
+        if(vect2==1){
+        textcolor(WHITE);
+        printf("Los dados se lanzaron para la partida 1 y gano ");
+        textcolor(10);
+        printf("%s\n",nom1);
+		}
+        if(vect2==2){
+        textcolor(WHITE);
+         printf("Los dados se lanzaron para la partida 1 y gano ");
+          textcolor(14);
+        printf("%s\n",nom2);
+		}
+
+		for(i=0;i<ce;i++){
+                textcolor(WHITE);
+			printf("Los dados se lanzaron para la partida %d y gano",vect[i]);
+			if(vect1[i]==1){
+                textcolor(10);
+                printf(" %s\n",nom1);
+                }
+            if(vect1[i]==2){
+                textcolor(14);
+                printf(" %s\n",nom2);
+                }
+
+		}
+
+       if(cont==3 && cont1==1) /// indiscutible j1 + derrota
+		{   getch();
+		    system("cls");
+		    printf("\n\n\n\n\n");
+			printf("\t\tEl ganador indiscutible es %s con un total de %d victorias y %d derrota\n",nom1,cont,cont1);
+		}
+
+		if(cont==1 && cont1==3) /// indiscutible j2 + derrota
+		{
+		     getch();
+		    system("cls");
+		    textcolor(14);
+		      printf("\n\n\n\n\n");
+			printf("\t\tEl ganador indiscutible es %s con un total de %d victorias y %d derrota\n",nom2,cont1,cont);
+		}
+
+		if(cont==3 && ce==1)/// Indiscutiblej1 + empate
+		{
+            getch();
+		    system("cls");
+		    textcolor(10);
+		      printf("\n\n\n\n\n");
+			printf("\t\tEl ganador indiscutible es %s con un total de %d victorias y %d derrota\n",nom1,cont,ce);
+		}
+
+		if(cont1==3 && ce==1)/// Indiscutible j2 + empate
+		{
+		    getch();
+		    system("cls");
+		     textcolor(14);
+		      printf("\n\n\n\n\n");
+			printf("\t\tEl ganador indiscutible es %s con un total de %d victorias y %d derrota\n",nom2,cont1,cont);
+		}
+		if(cont==3 && cont1==2 || cont==2 && cont1==3){
+		textcolor(WHITE);
+            printf("No hubo un ganador indiscutible\n");
+            }
+        getch();
+        	if(cont==4){
+                    system("cls");
+            textcolor(10);
+            printf("\n\n\n\n\n");
+            printf("\t\t\tFelicidades %s dominaste la partida con 4 victorias seguidas...\n\n\n\n",nom1);
+            }
+            if(cont1==4){
+                    system("cls");
+            textcolor(14);
+             printf("\n\n\n\n\n");
+            printf("\t\t\tFelicidades %s dominaste la partida con 4 victorias seguidas...\n\n\n\n",nom2);
+            }
+                getch();
+                system("cls");
+                textcolor(9);
+                printf("\n\n\n\n\n\t\t\t\tGRACIAS POR JUGAR!!! HASTA LUEGO\n\n\n\n\t\t\t\tRealizado por: Yorman Galindo\n\n\n");
+	return 0;
+}
+
+int dados(int j1, int j2,char nom1[10],char nom2[10]){
+   char a=0;
+    int i,d1[2],d2[2];
+	int acum1=0,acum2=0;
+
+    do{
+        textcolor(10);
+		 printf("\t\t Presiona enter para lanzar los dados %s\n\n",nom1);
+		 getch();
+
+
+		srand(time(0));
+		acum1=0;
+		 for(i=0;i<2;i++){
+
+		 	d1[i]=rand()%5+1;
+		 	acum1+=d1[i];
+		 }
+		acum2=0;
+		 for(i=0;i<2;i++){
+            if(i==0)
+		 	printf("\t\t\t\t%d + ",d1[i]);
+
+		 	if(i>0)
+		 	printf("%d ",d1[i]);
+
+		 }
+		 printf(": %d",acum1);
+		 printf("\n\n");
+		 getch();
+
+        textcolor(14);
+		 printf("\t\t Presiona enter para lanzar los dados %s\n\n",nom2);
+		 getch();
+
+		srand(time(0));
+		for(i=0;i<2;i++){
+		 	d2[i]=rand()%5+1;
+		 	acum2+=d2[i];
+		 }
+
+		 for(i=0;i<2;i++){
+		 	if(i==0)
+		 	printf("\t\t\t\t%d + ",d2[i]);
+
+		 	if(i>0)
+		 	printf("%d ",d2[i]);
+		 }
+		 printf(": %d",acum2);
+		 printf("\n\n");
+		 getch();
+
+            if(acum1==acum2){
+                textcolor(12);
+                printf("\t\t\t\tEMPATE\n");
+                printf("\t\t\t   Lanzar de nuevo");
+                getch();
+                system("cls");
+
+            }
+            system("cls");
+        }while(acum1==acum2);
+
+		if(acum1>acum2)
+			a=j1;
+
+		if(acum1<acum2)
+			a=j2;
+
+		return a;
+}
+
+int ganador(int m[tf][tc],char nom[10],int cj){
+
+  int i,j,band=2,x,y;
+//-------------------------------------------------------------horizontal-------------------------------------------------------------
+  for(i=0;i<tf;i++)
+    {
+
+    for(j=0;j<tc-3;j++)
+     {
+      	if(m[i][j]!=32 && m[i][j]!=202 && m[i][j]!=205 && m[i][j]!=203 && m[i][j]!=186 && m[i][j]==m[i][j+2] && m[i][j]==m[i][j+4] && m[i][j]==m[i][j+6])
+         {
+         band=1;
+         x=i; y=j;
+          printf("\t\t\t\t     GANADOR   \n\n");
+          textcolor(WHITE);
+          printf("\t\t\t Gana %s con un total de %d jugadas\n",nom,cj);
+          printf("\t\t\t       Fila  Columna\n",x+3,y);
+         printf("\t\t\t ficha 1:[%d]   [%d]\n",x,y+6);
+         printf("\t\t\t ficha 2:[%d]   [%d]\n",x,y+4);
+         printf("\t\t\t ficha 3:[%d]   [%d]\n",x,y+2);
+         printf("\t\t\t ficha 4:[%d]   [%d]\n",x,y);
+         printf("\t\t\t Direccion: Horizontal\n");
+
+         }
+    }
+    }
+//------------------------------------------------------------vertical-----------------------------------------------------------
+for(j=0;j<tc;j++)
+    {
+    for(i=0;i<tf-3;i++)
+      if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i+1][j] && m[i][j]==m[i+2][j] && m[i][j]==m[i+3][j])
+         {
+
+         band=1;
+            x=i; y=j;
+
+         printf("\t\t\t\t    GANADOR   \n\n");
+         textcolor(WHITE);
+         printf("\t\t\tGana %s con un total de %d jugadas\n",nom,cj);
+         printf("\t\t\t       Fila  Columna\n",x+3,y);
+         printf("\t\t\tficha 1:[%d]   [%d]\n",x+3,y);
+         printf("\t\t\tficha 2:[%d]   [%d]\n",x+2,y);
+         printf("\t\t\tficha 3:[%d]   [%d]\n",x+1,y);
+         printf("\t\t\tficha 4:[%d]   [%d]\n",x,y);
+        printf("\t\t\tDireccion: Vertical\n");
+
+         }
+    }
+//----------------------------------------------------diagonal principal-----------------------------------------------------
+for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i+1][j+2] && m[i][j]==m[i+2][j+4] && m[i][j]==m[i+3][j+6])
+        {
+
+        band=1;
+        x=i; y=j;
+         printf("\t\t\t\t     GANADOR   \n\n");
+         textcolor(WHITE);
+         printf("\t\t\tGana %s con un total de %d jugadas\n",nom,cj);
+         printf("\t\t\t       Fila  Columna\n",x+3,y);
+         printf("\t\t\tficha 1:[%d]   [%d]\n",x+3,y+6);
+         printf("\t\t\tficha 2:[%d]   [%d]\n",x+2,y+4);
+         printf("\t\t\tficha 3:[%d]   [%d]\n",x+1,y+2);
+         printf("\t\t\tficha 4:[%d]   [%d]\n",x,y);
+        printf("\t\t\tDireccion: Diagonal\n");
+        }
+	}
+    }
+    //------------------------------------ DIAGONAL SECUNDARIA ---------------------------------------------
+	for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i-1][j+2] && m[i][j]==m[i-2][j+4] && m[i][j]==m[i-3][j+6])
+        {
+        band=1;
+        x=i; y=j;
+          printf("\t\t\t\t    GANADOR   \n\n");
+          textcolor(WHITE);
+          printf("\t\t\tGana %s con un total de %d jugadas\n",nom,cj);
+          printf("\t\t\t       Fila  Columna\n",x+3,y);
+         printf("\t\t\tficha 1:[%d]   [%d]\n",x-3,y+6);
+         printf("\t\t\tficha 2:[%d]   [%d]\n",x-2,y+4);
+         printf("\t\t\tficha 3:[%d]   [%d]\n",x-1,y+2);
+         printf("\t\t\tficha 4:[%d]   [%d]\n",x,y);
+        printf("\t\t\tDireccion: Diagonal\n");
+
+        }
+	}
+    }
+    if(band==1)
+        return 1;
+    if(band!=1)
+        return 2;
+}
+int linea4_h(int m[tf][tc]){
+
+  int i,j,cont1=0;
+//-------------------------------------------------------------horizontal-------------------------------------------------------------
+  for(i=0;i<tf;i++)
+    {
+
+    for(j=0;j<tc-3;j++)
+     {
+      	if(m[i][j]!=32 && m[i][j]!=202 && m[i][j]!=205 && m[i][j]!=203 && m[i][j]!=186 && m[i][j]==m[i][j+2] && m[i][j]==m[i][j+4] && m[i][j]==m[i][j+6])
+         {
+            cont1++;
+         }
+    }
+    }
+   return cont1;
+}
+int linea4_v(int m[tf][tc]){
+    int i,j,cont1=0;
+    //------------------------------------------------------------vertical-----------------------------------------------------------
+for(j=0;j<tc;j++)
+    {
+    for(i=0;i<tf-3;i++)
+      if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i+1][j] && m[i][j]==m[i+2][j] && m[i][j]==m[i+3][j])
+         {
+        cont1++;
+         }
+    }
+    return cont1;
+}
+
+int linea4_d(int m[tf][tc]){
+    int i,j,cont1=0;
+    //----------------------------------------------------diagonal principal-----------------------------------------------------
+   for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i+1][j+2] && m[i][j]==m[i+2][j+4] && m[i][j]==m[i+3][j+6])
+        {
+       cont1++;
+        }
+	}
+    }
+    //------------------------------------ DIAGONAL SECUNDARIA ---------------------------------------------
+	for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]==m[i-1][j+2] && m[i][j]==m[i-2][j+4] && m[i][j]==m[i-3][j+6])
+        {
+       cont1++;
+        }
+	}
+    }
+    return cont1;
+}
+
+void moverse(int m[tf][tc],int j, char nom[10],int p){
+
+    int dir1,f=1,c=1,f3,c3,tecla,tecla1,dir,f2,c2,f1=1,c1=1;
+int aux1=1,aux2=2;
+int band;
+
+
+
+if(aux1==j){
+do{
+	dir=0;
+	tecla=0;
+	band=0;
+	f2=f,c2=c;
+    m[f][c]=254;
+    system("cls");
+    textcolor(WHITE);
+    imprimir(m,p);
+	textcolor(10);
+    printf("\n\t\t\t\tTurno de %s",nom);
+
+    tecla=getch();
+     m[f][c]=32;
+
+            if(tecla==der){
+                if(m[f][c+2]!=186)
+                    c+=2;
+            }
+         if(tecla==izq){
+                if(m[f][c-2]!=187)
+                    c-=2;
+				}
+
+        	if(tecla==dis){
+			if(m[f2+1][c2]==32)
+				dir=1;
+		}
+
+		while(dir==1 && m[f2+1][c2]==32){
+			system("cls");
+            f2++;
+            m[f2][c2]=254;
+            imprimir(m,p);
+            if(m[f2+1][c2]==32)
+            m[f2][c2]=32;
+            m[f][c]=32;
+            band=1;
+            }
+
+
+		}while(band==0);
+	}
+
+	if(aux2==j){
+		do{
+	dir=0;
+	band=0;
+	f2=f,c2=c;
+    m[f][c]=4;
+    system("cls");
+      textcolor(WHITE);
+    imprimir(m,p);
+     textcolor(14);
+      printf("\n\t\t\t\tTurno de %s",nom);
+     m[f][c]=32;
+
+	tecla=getch();
+            if(tecla==der){
+                if(m[f][c+2]!=186)
+                    c+=2;
+            }
+
+         if(tecla==izq){
+                if(m[f][c-2]!=187)
+                    c-=2;
+				}
+
+        	if(tecla==dis){
+			if(m[f2+1][c2]==32)
+				dir=1;
+		}
+
+		while(dir==1 && m[f2+1][c2]==32){
+			system("cls");
+            f2++;
+            m[f2][c2]=4;
+            imprimir(m,p);
+            if(m[f2+1][c2]==32)
+            m[f2][c2]=32;
+            m[f][c]=32;
+            band=1;
+            }
+
+
+    }while(band==0);
+}
+
+}
+
+int linea_v2(int m[tf][tc]){
+	int i,j,cont=0;
+//------------------------------------------------------------vertical-----------------------------------------------------------
+for(j=0;j<tc;j++)
+
+    {
+
+    for(i=0;i<tf-2;i++)
+      if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=254 && m[i][j]==m[i+1][j] && m[i][j]==m[i+2][j])
+         {
+        	cont++;
+         }
+    }
+    return cont;
+}
+
+int linea_d2(int m[tf][tc]){
+	int i,j,cont=0;
+	//----------------------------------------------------diagonal principal-----------------------------------------------------
+   for(i=0;i<tf;i++)
+	{
+
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=254 && m[i][j]==m[i+1][j+2] && m[i][j]==m[i+2][j+4] )
+        {
+        cont++;
+        }
+	}
+    }
+    //------------------------------------ DIAGONAL SECUNDARIA ---------------------------------------------
+	for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=254 && m[i][j]==m[i-1][j+2] && m[i][j]==m[i-2][j+4] )
+        {
+        cont++;
+        }
+	}
+    }
+	return cont;
+
+}
+
+int linea_h2(int m[tf][tc]){
+
+  int i,j,cont=0;
+//-------------------------------------------------------------horizontal-------------------------------------------------------------
+  for(i=0;i<tf;i++)
+	{
+
+    for(j=0;j<tc-2;j++)
+     {
+      	if(m[i][j]!=32 && m[i][j]!=202 && m[i][j]!=4 && m[i][j]!=205 && m[i][j]!=203 && m[i][j]!=186 && m[i][j]==m[i][j+2] && m[i][j]==m[i][j+4])
+         {
+         cont++;
+
+         }
+    }
+    }
+    return cont;
+
+}
+int linea_v(int m[tf][tc]){
+	int i,j,cont=0;
+//------------------------------------------------------------vertical-----------------------------------------------------------
+for(j=0;j<tc;j++)
+
+    {
+
+    for(i=0;i<tf-2;i++)
+      if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=4 && m[i][j]==m[i+1][j] && m[i][j]==m[i+2][j])
+         {
+        	cont++;
+         }
+    }
+    return cont;
+}
+
+int linea_d(int m[tf][tc]){
+	int i,j,cont=0;
+	//----------------------------------------------------diagonal principal-----------------------------------------------------
+   for(i=0;i<tf;i++)
+	{
+
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=4 && m[i][j]==m[i+1][j+2] && m[i][j]==m[i+2][j+4] )
+        {
+        cont++;
+        }
+	}
+    }
+    //------------------------------------ DIAGONAL SECUNDARIA ---------------------------------------------
+	for(i=0;i<tf;i++)
+    {
+    for(j=0;j<tc;j++)
+    {
+     	if(m[i][j]!=32 && m[i][j]!=186 && m[i][j]!=4 && m[i][j]==m[i-1][j+2] && m[i][j]==m[i-2][j+4] )
+        {
+        cont++;
+        }
+	}
+    }
+	return cont;
+
+}
+
+int linea_h(int m[tf][tc]){
+
+  int i,j,cont=0;
+//-------------------------------------------------------------horizontal-------------------------------------------------------------
+  for(i=0;i<tf;i++)
+	{
+
+    for(j=0;j<tc-2;j++)
+     {
+      	if(m[i][j]!=32 && m[i][j]!=202 && m[i][j]!=4 && m[i][j]!=205 && m[i][j]!=203 && m[i][j]!=186 && m[i][j]==m[i][j+2] && m[i][j]==m[i][j+4])
+         {
+         cont++;
+
+         }
+    }
+    }
+    return cont;
+
+}
+
+void Cargar(int m[tf][tc]){
+
+int i,j;
+  for (i=1;i<10;i++)
+    {
+      for (j=1;j<tc;j+=2)
+      {
+            m[i][j]=32;
+      }
+    }
+}
+void imprimir(int m[tf][tc],int p){
+
+    int i,j;
+    printf("\t\t\t\t    Partida %d\n\n",p);
+
+        for (i=0 ; i<tf ; i++){
+                printf("\t\t\t");
+            for (j=0; j<tc ; j++)
+            {
+               if(m[i][j]==4)
+                textcolor(14);
+                    if(m[i][j]==254)
+                    textcolor(10);
+
+            printf("%c ",m[i][j]);
+            textcolor(WHITE);
+
+
+
+            }
+            printf("\n");
+        }
+
+}
