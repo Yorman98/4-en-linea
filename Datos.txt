@@ -1,0 +1,11 @@
+﻿Jose-10
+Maria-20
+Francisco-30
+Luis-40
+Ana-50
+Pedro-60
+Lucia-70
+Juan-80
+Pablo-90
+Andrea-100
+yorman-0
